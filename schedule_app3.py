@@ -32,11 +32,16 @@ with col2:
     holiday_str = st.text_input("國定假日（yyyy-mm-dd, 逗號分隔）", "")
 
 def get_4weeks_dates(start_date):
+    # 確保起始日是週一
     if start_date.weekday() != 0:
         start_date = start_date - timedelta(days=start_date.weekday())
     all_days = []
-    for i in range(4*5):
-        all_days.append(start_date + timedelta(days=i))
+    current_day = start_date
+    while len(all_days) < 4 * 5:
+        # 只收錄週一到週五（weekday() 0=週一, 4=週五）
+        if current_day.weekday() < 5:
+            all_days.append(current_day)
+        current_day += timedelta(days=1)
     return all_days
 
 all_possible_dates = get_4weeks_dates(start_date)
